@@ -109,8 +109,6 @@ a:focus {
 
 .navbar .navbar-brand {
     margin: 0;
-    color: #fbaf32;
-    font-size: 45px;
     line-height: 0px;
     font-weight: 700;
     font-family: 'Nunito', sans-serif;
@@ -132,7 +130,7 @@ a:focus {
 
 .navbar .navbar-brand img {
     max-width: 100%;
-    max-height: 40px;
+    max-height: 60px;
 }
 
 .navbar .dropdown-menu {
