@@ -68,6 +68,7 @@ class PengeluaranResource extends Resource
                                     ->orderBy('nama', 'asc')
                                     ->pluck('nama', 'id')
                             )
+                            ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                             ->searchable()
                             ->columnSpanFull()
                             ->live(),
