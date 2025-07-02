@@ -3,6 +3,8 @@
 namespace App\Filament\PosApp\Resources\MutasiStokResource\Pages;
 
 use App\Filament\PosApp\Resources\MutasiStokResource;
+use App\Models\BahanBaku;
+use App\Models\Produk;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
