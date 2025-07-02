@@ -27,6 +27,7 @@ class PosAppPanelProvider extends PanelProvider
             ->default()
             ->id('pos-app')
             ->brandLogo(asset('storage/logo-renzkitchen.png'))
+            ->brandLogoHeight('200px')
             ->brandName("Ren'z Kitchen")
             ->path('pos-app')
             ->login()
