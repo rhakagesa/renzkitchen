@@ -31,7 +31,7 @@ class PosAppPanelProvider extends PanelProvider
             ->path('pos-app')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Yellow,
             ])
             ->discoverResources(in: app_path('Filament/PosApp/Resources'), for: 'App\\Filament\\PosApp\\Resources')
             ->discoverPages(in: app_path('Filament/PosApp/Pages'), for: 'App\\Filament\\PosApp\\Pages')
