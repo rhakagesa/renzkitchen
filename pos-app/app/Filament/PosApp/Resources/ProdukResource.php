@@ -62,7 +62,7 @@ class ProdukResource extends Resource
                     ->numeric()
                     ->required()
                     ->default(0)
-                    ->disabled(fn ($record) => $record->stok > 0),
+                    ->disabled(fn ($record) => $record?->stok > 0 && !Auth::user()->hasRole('super_admin')),
 
                 Textarea::make('keterangan')
                     ->required(),
