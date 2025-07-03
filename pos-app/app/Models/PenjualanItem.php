@@ -10,6 +10,15 @@ class PenjualanItem extends Model
     //
     use SoftDeletes;
 
+    protected $fillable = [
+        'produk_id',
+        'pendapatan_id',
+        'penjualan_id', 
+        'qty', 
+        'harga', 
+        'subtotal',
+    ];
+
     public function penjualan()
     {
         return $this->belongsTo(Penjualan::class);

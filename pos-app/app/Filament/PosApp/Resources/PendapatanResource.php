@@ -31,7 +31,9 @@ class PendapatanResource extends Resource
 {
     protected static ?string $model = Pendapatan::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-trending-up';
+
+    protected static ?string $navigationGroup = 'Pembukuan';
 
     protected static ?string $navigationLabel = 'Pendapatan';
 
@@ -111,10 +113,9 @@ class PendapatanResource extends Resource
                         Hidden::make('produk_item'),
                         Hidden::make('original_qty')
                     ])
-                    ->reactive()
-                    ->afterStateUpdated(function ($set, $get) {
+                    ->addAction(function ($set, $get) {
                         self::recalculateTotalPenjualan($set, $get);
-                    })->live(debounce: 700),
+                    }),
                 Section::make()
                     ->schema([
                     TextInput::make('total')
