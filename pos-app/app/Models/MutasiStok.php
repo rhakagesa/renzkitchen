@@ -33,6 +33,7 @@ class MutasiStok extends Model
         $tempBahanBaku = $value;
         foreach ($tempBahanBaku as &$item) {
             unset($item['item_bahan_baku']);
+            unset($item['original_qty']);
         }
         $this->attributes['bahan_baku'] = json_encode($tempBahanBaku);
     }
@@ -40,7 +41,7 @@ class MutasiStok extends Model
     protected static function booted()
     {
         static::deleted(function ($mutasiStok) {
-            $bahanBakuList = json_decode($mutasiStok->bahan_baku, true);
+            $bahanBakuList = $mutasiStok->bahan_baku;
             $getProduk = Produk::find($mutasiStok->produk_id);
             $jumlahProduksi = $mutasiStok->jumlah_produk;
             foreach ($bahanBakuList as $item) {
@@ -55,7 +56,7 @@ class MutasiStok extends Model
         });
 
         static::restored(function ($mutasiStok) {
-            $bahanBakuList = json_decode($mutasiStok->bahan_baku, true);
+            $bahanBakuList = $mutasiStok->bahan_baku;
             $getProduk = Produk::find($mutasiStok->produk_id);
             $jumlahProduksi = $mutasiStok->jumlah_produk;
             foreach ($bahanBakuList as $item) {

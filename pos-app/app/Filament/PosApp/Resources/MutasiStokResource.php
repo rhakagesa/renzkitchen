@@ -123,7 +123,7 @@ class MutasiStokResource extends Resource
                 //
                 TextColumn::make('created_at')
                     ->label('Tanggal')
-                    ->dateTime(),
+                    ->date(),
                 TextColumn::make('produk.nama')
                     ->label('Produksi Menu'),
                 TextColumn::make('jumlah_produk')
@@ -165,7 +165,8 @@ class MutasiStokResource extends Resource
                 ], layout: FiltersLayout::AboveContent)
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->hidden(fn ($record) => $record->deleted_at !== null),
                 Tables\Actions\DeleteAction::make()
                     ->hidden(fn ($record) => $record->deleted_at !== null),
                 Tables\Actions\RestoreAction::make()
