@@ -67,7 +67,11 @@ class PendapatanResource extends Resource
                             ->afterStateUpdated(function ($set, $get) {
                                 $set('produk_item', Produk::find($get('produk_id')));
                                 $set('harga', \number_format($get('produk_item')['harga_jual'], 0, '.', ','));
-                            })->live(),
+                                self::calculatedSubTotal($set, $get);
+                                self::recalculateTotalPenjualan($set, $get);
+                            })
+                            ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                            ->live(),
                         TextInput::make('qty')
                             ->required()
                             ->label('Jumlah')
@@ -106,7 +110,11 @@ class PendapatanResource extends Resource
                             ->prefix('Rp '), 
                         Hidden::make('produk_item'),
                         Hidden::make('original_qty')
-                        ]),
+                    ])
+                    ->reactive()
+                    ->afterStateUpdated(function ($set, $get) {
+                        self::recalculateTotalPenjualan($set, $get);
+                    })->live(debounce: 700),
                 Section::make()
                     ->schema([
                     TextInput::make('total')
@@ -268,5 +276,20 @@ class PendapatanResource extends Resource
 
         $subTotal = $qty * $harga;
         $set('subtotal', number_format($subTotal, 0, '.', ','));
+    }
+
+    static function recalculateTotalPenjualan($set, $get): void
+    {
+        $totalPenjualan = $get('penjualan_items') ?? [];
+        $total = 0;
+
+        foreach($totalPenjualan as $item) {
+            $subTotal = (int) (\str_replace(['.', ','], '', $item['subtotal']) ?? 0);
+            $total += $subTotal;
+        }
+        
+        $set('total', number_format($total, 0, '.', ','));
+        
+        self::recalculateGrandTotal($set, $get);
     }
 }
