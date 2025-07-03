@@ -135,14 +135,23 @@ class MutasiStokResource extends Resource
                 //
                 TrashedFilter::make()
                     ->hidden(!Auth::user()->hasRole('super_admin')),
-                Filter::make('tanggal')
+                Filter::make('tanggal_mulai')
                     ->form([
-                        DatePicker::make('tanggal')
-                            ->label('Tanggal Produksi')
+                        DatePicker::make('tanggal_mulai')
+                            ->label('Tanggal Mulai')
                     ])
                     ->query(function ($query, array $data) {
                         return $query
-                            ->when($data['tanggal'], fn ($query) => $query->whereDate('created_at', '=', date('Y-m-d', strtotime($data['tanggal']))));
+                        ->when($data['tanggal_mulai'], fn ($query) => $query->whereDate('created_at', '>=', date('Y-m-d', strtotime($data['tanggal_mulai']))));
+                    }),
+                Filter::make('tanggal_sampai')
+                    ->form([
+                        DatePicker::make('tanggal_sampai')
+                            ->label('Tanggal Sampai')
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                        ->when($data['tanggal_sampai'], fn ($query) => $query->whereDate('created_at', '<=', date('Y-m-d', strtotime($data['tanggal_sampai']))));
                     }),
                 Filter::make('tipe_produk')
                     ->form([
