@@ -16,17 +16,10 @@ class CreatePengeluaran extends CreateRecord
         return $this->getResource()::getUrl('index');
     }
 
-    protected function mutateFormDataBeforeCreate(array $data): array
-    {
-        $data['bahan_baku'] = isset($data['bahan_baku']) && $data['bahan_baku'] ? \json_encode($data['bahan_baku']) : null;
-
-        return $data;
-    }
-
     protected function afterCreate(): void
     {
         if ($this->record->tipe === 'beli_bahan_baku') {
-            $bahanBakuItems = \json_decode($this->record->bahan_baku, \true);
+            $bahanBakuItems = $this->record->bahan_baku;
             foreach ($bahanBakuItems as $key => $value) {
                 $getBahanBaku = BahanBaku::find($value['bahan_baku_id']);
                 

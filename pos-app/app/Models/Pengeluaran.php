@@ -17,12 +17,24 @@ class Pengeluaran extends Model
         'jumlah_total',
         'keterangan',
     ];
+
+    public function getBahanBakuAttribute($value)
+    {
+        $value = isset($value) && $value ? \json_decode($value, true) : null;
+        return $value;
+    }
+
+    public function setBahanBakuAttribute($value)
+    {
+        $value = isset($value) && $value ? \json_encode($value) : null;
+        $this->attributes['bahan_baku'] = $value;
+    }
     
     protected static function booted()
     {
         static::deleted(function ($pengeluaran) {
             if ($pengeluaran->tipe === 'beli_bahan_baku') {
-                $bahanBakuList = json_decode($pengeluaran->bahan_baku, true);
+                $bahanBakuList = $pengeluaran->bahan_baku;
 
                 foreach ($bahanBakuList as $item) {
                     $bahanBaku = BahanBaku::find($item['bahan_baku_id']);
@@ -37,7 +49,7 @@ class Pengeluaran extends Model
 
         static::restored(function ($pengeluaran) {
             if ($pengeluaran->tipe === 'beli_bahan_baku') {
-                $bahanBakuList = json_decode($pengeluaran->bahan_baku, true);
+                $bahanBakuList = $pengeluaran->bahan_baku;
 
                 foreach ($bahanBakuList as $item) {
                     $bahanBaku = BahanBaku::find($item['bahan_baku_id']);

@@ -194,7 +194,8 @@ class PengeluaranResource extends Resource
                 ], layout: FiltersLayout::AboveContent)
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->hidden(fn ($record) => $record->deleted_at !== null),
                 Tables\Actions\DeleteAction::make()
                     ->hidden(fn ($record) => $record->deleted_at !== null),
                 Tables\Actions\RestoreAction::make()
@@ -220,7 +221,6 @@ class PengeluaranResource extends Resource
             'index' => Pages\ListPengeluarans::route('/'),
             'create' => Pages\CreatePengeluaran::route('/create'),
             'edit' => Pages\EditPengeluaran::route('/{record}/edit'),
-            'view' => Pages\ViewPengeluaran::route('/{record}'),
         ];
     }
 
