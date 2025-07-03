@@ -32,9 +32,9 @@ class PengeluaranResource extends Resource
 {
     protected static ?string $model = Pengeluaran::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-trending-down';
 
-    //protected static ?string $navigationGroup = 'Pembukuan';
+    protected static ?string $navigationGroup = 'Pembukuan';
 
     protected static ?string $navigationLabel = 'Pengeluaran';
 

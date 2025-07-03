@@ -23,6 +23,8 @@ class KategoriResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
+    protected static ?string $navigationGroup = 'Master Data';
+
     protected static ?string $navigationLabel = 'Kategori';
 
     public static function form(Form $form): Form

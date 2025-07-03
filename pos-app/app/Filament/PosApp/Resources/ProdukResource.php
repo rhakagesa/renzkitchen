@@ -32,7 +32,7 @@ class ProdukResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
-    //protected static ?string $navigationGroup = 'Produk & Bahan Baku';
+    protected static ?string $navigationGroup = 'Produk & Bahan Baku';
 
     protected static ?string $navigationLabel = 'Produk';
 

@@ -25,7 +25,7 @@ class BahanBakuResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-cube';
 
-    //protected static ?string $navigationGroup = 'Produk & Bahan Baku';
+    protected static ?string $navigationGroup = 'Produk & Bahan Baku';
 
     protected static ?string $navigationLabel = 'Bahan Baku';
 
