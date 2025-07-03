@@ -24,8 +24,13 @@ class Produk extends Model
         return $this->belongsTo(Kategori::class);
     }
 
-    public function mutasi_stok()
+    public function mutasiStok()
     {
         return $this->hasMany(MutasiStok::class);
+    }
+
+    public function penjualanItems()
+    {
+        return $this->hasMany(PenjualanItem::class);
     }
 }
