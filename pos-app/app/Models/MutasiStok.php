@@ -11,6 +11,7 @@ class MutasiStok extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'tanggal',
         'produk_id',
         'bahan_baku',
         'jumlah_produk',
