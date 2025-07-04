@@ -29,9 +29,11 @@ class MutasiStokResource extends Resource
 {
     protected static ?string $model = MutasiStok::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-arrows-right-left';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-path-rounded-square';
 
-    protected static ?string $navigationLabel = 'Mutasi Stok';
+    protected static ?string $navigationGroup = 'Mutasi Stok';
+    
+    protected static ?string $navigationLabel = 'Produksi';
 
     public static function form(Form $form): Form
     {

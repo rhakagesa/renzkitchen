@@ -27,6 +27,11 @@ class KategoriResource extends Resource
 
     protected static ?string $navigationLabel = 'Kategori';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
     public static function form(Form $form): Form
     {
         return $form

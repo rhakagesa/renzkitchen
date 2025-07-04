@@ -25,9 +25,14 @@ class BahanBakuResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-cube';
 
-    protected static ?string $navigationGroup = 'Produk & Bahan Baku';
+    protected static ?string $navigationGroup = 'Stok';
 
     protected static ?string $navigationLabel = 'Bahan Baku';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
