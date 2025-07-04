@@ -24,4 +24,25 @@ class Pendapatan extends Model
     {
         return $this->hasMany(PenjualanItem::class);
     }
+
+    protected static function booted()
+    {
+        static::softDeleted(function ($pendapatan) {
+            $penjualanItems = PenjualanItem::where('pendapatan_id', $pendapatan->id)->get();
+            foreach($penjualanItems as $item) {
+                $getProduk = Produk::where('id', $item->produk_id)->first();
+                $getProduk->stok += $item->qty;
+                $getProduk->save();
+            }
+        });
+
+        static::restored(function ($pendapatan) {
+            $penjualanItems = PenjualanItem::where('pendapatan_id', $pendapatan->id)->get();
+            foreach($penjualanItems as $item) {
+                $getProduk = Produk::where('id', $item->produk_id)->first();
+                $getProduk->stok -= $item->qty;
+                $getProduk->save();
+            }
+        });
+    }
 }

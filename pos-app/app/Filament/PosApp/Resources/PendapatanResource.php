@@ -72,6 +72,9 @@ class PendapatanResource extends Resource
                                 self::calculatedSubTotal($set, $get);
                                 self::recalculateTotalPenjualan($set, $get);
                             })
+                            ->afterStateHydrated(function ($set, $get) {
+                                $set('produk_item', Produk::find($get('produk_id')));
+                            })
                             ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                             ->live(),
                         TextInput::make('qty')
