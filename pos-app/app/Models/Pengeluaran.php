@@ -32,7 +32,7 @@ class Pengeluaran extends Model
     
     protected static function booted()
     {
-        static::deleted(function ($pengeluaran) {
+        static::softDeleted(function ($pengeluaran) {
             if ($pengeluaran->tipe === 'beli_bahan_baku') {
                 $bahanBakuList = $pengeluaran->bahan_baku;
 

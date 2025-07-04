@@ -40,7 +40,7 @@ class MutasiStok extends Model
 
     protected static function booted()
     {
-        static::deleted(function ($mutasiStok) {
+        static::softDeleted(function ($mutasiStok) {
             $bahanBakuList = $mutasiStok->bahan_baku;
             $getProduk = Produk::find($mutasiStok->produk_id);
             $jumlahProduksi = $mutasiStok->jumlah_produk;
