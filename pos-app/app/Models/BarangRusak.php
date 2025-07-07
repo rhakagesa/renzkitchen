@@ -30,4 +30,12 @@ class BarangRusak extends Model
     {
         return $this->belongsTo(BahanBaku::class);
     }
+
+    public function getNamaBarangAttribute(){
+        if($this->tipe == 'produk') {
+            return $this->produk->nama;
+        } else {
+            return $this->bahan_baku->nama;
+        }
+    }
 }
