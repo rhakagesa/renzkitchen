@@ -28,8 +28,8 @@ class ViewPendapatan extends ViewRecord
                 $item['subtotal'] = number_format($item->subtotal, 0, '.', ',');
             }
         }
-        $data['total'] = $this->getRecord()->total;
-        $data['grand_total'] = $this->getRecord()->grand_total;
+        $data['total'] = isset($data['total']) ? number_format($data['total'], 0, '.', ',') : 0;
+        $data['grand_total'] = isset($data['grand_total']) ? number_format($data['grand_total'], 0, '.', ',') : 0;
         return $data;
     }
 }
