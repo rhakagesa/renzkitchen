@@ -6,6 +6,7 @@ use App\Filament\PosApp\Resources\PengeluaranResource\Pages;
 use App\Filament\PosApp\Resources\PengeluaranResource\RelationManagers;
 use App\Models\BahanBaku;
 use App\Models\Pengeluaran;
+use App\Models\PengeluaranDetail;
 use Dom\Text;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -20,6 +21,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Repeater;
 use Filament\Support\Enums\MaxWidth;
+use Filament\Support\RawJs;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
@@ -72,7 +74,7 @@ class PengeluaranResource extends Resource
                             ->searchable()
                             ->columnSpanFull()
                             ->live(),
-                        TextInput::make('qty')
+                        TextInput::make('jumlah')
                             ->label('Jumlah')
                             ->numeric()
                             ->required()
@@ -97,6 +99,10 @@ class PengeluaranResource extends Resource
                             ->numeric()
                             ->required()
                             ->prefix('Rp')
+                            ->mask(RawJs::make('$money($input)'))
+                            ->stripCharacters(',')
+                            ->inputMode('decimal')
+                            ->default(0)
                             ->live(debounce: 700)
                             ->disabled(fn ($get) => $get('bahan_baku_id') === null)
                             ->afterStateUpdated(function ($set, $get) {
@@ -106,7 +112,11 @@ class PengeluaranResource extends Resource
                             ->label('Total')
                             ->numeric()
                             ->readonly()
-                            ->prefix('Rp'),
+                            ->prefix('Rp')
+                            ->mask(RawJs::make('$money($input)'))
+                            ->stripCharacters(',')
+                            ->inputMode('decimal')
+                            ->default(0),
                     ])
                     ->columns(2)
                     ->minItems(1)
@@ -121,7 +131,11 @@ class PengeluaranResource extends Resource
                     ->required()
                     ->dehydrated()
                     ->readonly(fn ($get) => $get('tipe') === 'beli_bahan_baku')
-                    ->prefix('Rp'),
+                    ->prefix('Rp')
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(',')
+                    ->inputMode('decimal')
+                    ->default(0),
 
                 Textarea::make('keterangan')
                     ->maxLength(255)
@@ -221,6 +235,7 @@ class PengeluaranResource extends Resource
             'index' => Pages\ListPengeluarans::route('/'),
             'create' => Pages\CreatePengeluaran::route('/create'),
             'edit' => Pages\EditPengeluaran::route('/{record}/edit'),
+            'view' => Pages\ViewPengeluaran::route('/{record}'),
         ];
     }
 
@@ -241,22 +256,22 @@ class PengeluaranResource extends Resource
         $jumlahTotal = 0;
         
         foreach ($bahanBakuItems as $item) {
-            $qty = (int) ($item['qty'] ?? 0);
-            $hargaSatuan = (int) ($item['harga_satuan'] ?? 0);
-            $totalHarga = $qty * $hargaSatuan;
+            $jumlah = (int) ($item['jumlah'] ?? 0);
+            $hargaSatuan = (int) (\str_replace(['.', ','], '', $item['harga_satuan']) ?? 0);
+            $totalHarga = $jumlah * $hargaSatuan;
             $jumlahTotal += $totalHarga;
         }
 
-        $set('jumlah_total', $jumlahTotal);
+        $set('jumlah_total', \number_format($jumlahTotal, 0, '.', ','));
     }
 
     protected static function updateTotalHarga(callable $set, callable $get): void
     {
-        $qty = (int) ($get('qty') ?? 0);
-        $hargaSatuan = (int) ($get('harga_satuan') ?? 0);
+        $jumlah = (int) ($get('jumlah') ?? 0);
+        $hargaSatuan = (int) (\str_replace(['.', ','], '', $get('harga_satuan')) ?? 0);
 
-        $totalHarga = $qty * $hargaSatuan;
+        $totalHarga = $jumlah * $hargaSatuan;
 
-        $set('total_harga', $totalHarga);
+        $set('total_harga', \number_format($totalHarga, 0, '.', ','));
     }
 }

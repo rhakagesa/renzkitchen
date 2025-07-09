@@ -13,51 +13,40 @@ class Pengeluaran extends Model
     protected $fillable = [
         'tanggal',
         'tipe',
-        'bahan_baku',
         'jumlah_total',
         'keterangan',
     ];
 
-    public function getBahanBakuAttribute($value)
-    {
-        $value = isset($value) && $value ? \json_decode($value, true) : null;
-        return $value;
+    public function pengeluaranDetails(){
+        return $this->hasMany(PengeluaranDetail::class);
     }
 
-    public function setBahanBakuAttribute($value)
-    {
-        $value = isset($value) && $value ? \json_encode($value) : null;
-        $this->attributes['bahan_baku'] = $value;
-    }
-    
     protected static function booted()
     {
         static::softDeleted(function ($pengeluaran) {
             if ($pengeluaran->tipe === 'beli_bahan_baku') {
-                $bahanBakuList = $pengeluaran->bahan_baku;
-
-                foreach ($bahanBakuList as $item) {
-                    $bahanBaku = BahanBaku::find($item['bahan_baku_id']);
-                    if ($bahanBaku) {
-                        $total = (int) $item['qty'] * (int) $item['satuan'];
-                        $bahanBaku->stok -= $total;
-                        $bahanBaku->save();
-                    }
+                // Load details from pengeluaran_details relationship
+                $details = PengeluaranDetail::where('pengeluaran_id', $pengeluaran->id)->get();
+                
+                foreach ($details as $detail) {
+                    $getBahanBaku = BahanBaku::find($detail->bahan_baku_id);
+                    $total = $detail->jumlah * $detail->satuan;
+                    $getBahanBaku->stok -= $total;
+                    $getBahanBaku->save();
                 }
             }
         });
-
+    
         static::restored(function ($pengeluaran) {
             if ($pengeluaran->tipe === 'beli_bahan_baku') {
-                $bahanBakuList = $pengeluaran->bahan_baku;
-
-                foreach ($bahanBakuList as $item) {
-                    $bahanBaku = BahanBaku::find($item['bahan_baku_id']);
-                    if ($bahanBaku) {
-                        $total = (int) $item['qty'] * (int) $item['satuan'];
-                        $bahanBaku->stok += $total;
-                        $bahanBaku->save();
-                    }
+                // Load details from pengeluaran_details relationship
+                $details = PengeluaranDetail::where('pengeluaran_id', $pengeluaran->id)->get();
+                
+                foreach ($details as $detail) {
+                    $getBahanBaku = BahanBaku::find($detail->bahan_baku_id);
+                    $total = $detail->jumlah * $detail->satuan;
+                    $getBahanBaku->stok += $total;
+                    $getBahanBaku->save();
                 }
             }
         });
