@@ -38,4 +38,31 @@ class BarangRusak extends Model
             return $this->bahan_baku->nama;
         }
     }
+
+    protected static function booted()
+    {
+        static::softDeleted(function ($barangRusak) {
+            if($barangRusak->tipe == 'produk' && !empty($barangRusak->produk_id)) {
+                $getProduk = Produk::where('id', $barangRusak->produk_id)->first();
+                $getProduk->stok += $barangRusak->jumlah;
+                $getProduk->save();
+            } elseif ($barangRusak->tipe == 'bahan_baku' && !empty($barangRusak->bahan_baku_id)) {
+                $getBahanBaku = BahanBaku::where('id', $barangRusak->bahan_baku_id)->first();
+                $getBahanBaku->stok += $barangRusak->jumlah;
+                $getBahanBaku->save();
+            }
+        });
+
+        static::restored(function ($barangRusak) {
+            if($barangRusak->tipe == 'produk' && !empty($barangRusak->produk_id)) {
+                $getProduk = Produk::where('id', $barangRusak->produk_id)->first();
+                $getProduk->stok -= $barangRusak->jumlah;
+                $getProduk->save();
+            } elseif ($barangRusak->tipe == 'bahan_baku' && !empty($barangRusak->bahan_baku_id)) {
+                $getBahanBaku = BahanBaku::where('id', $barangRusak->bahan_baku_id)->first();
+                $getBahanBaku->stok -= $barangRusak->jumlah;
+                $getBahanBaku->save();
+            }
+        });
+    }
 }

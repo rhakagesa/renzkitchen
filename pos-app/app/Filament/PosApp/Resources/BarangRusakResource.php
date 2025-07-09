@@ -28,6 +28,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\DB;
 
 use function Livewire\on;
 
@@ -98,7 +99,7 @@ class BarangRusakResource extends Resource
                             ->label('Jumlah')
                             ->disabled(fn ($get) => $get('tipe') == null)
                             ->numeric()
-                            ->hint(fn ($set, $get) => 'Stok tersedia: ' . ($get('jumlah') ?? 0))
+                            ->hint(fn ($set, $get) => 'Stok tersedia: ' . (DB::table($get('tipe') == "bahan_baku" && $get('barang_rusak_id') ? 'bahan_bakus' : 'produks')->where('id', $get('barang_rusak_id'))->value('stok') ?? 0))
                             ->suffix(fn ($set, $get) => $get('tipe') == "bahan_baku" && $get('barang_rusak_id') ? $get('satuan') : 'pcs')
                             ->required()
                             ->afterStateUpdated(function ($set, $get) {

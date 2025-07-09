@@ -24,6 +24,8 @@ class EditBarangRusak extends EditRecord
 
     protected function mutateFormDataBeforeFill(array $data): array
     {
+        $data['nilai_kerugian'] = isset($data['nilai_kerugian']) ? \number_format($data['nilai_kerugian'], 0, '.', ',') : 0;
+        $data['total_kerugian'] = isset($data['total_kerugian']) ? \number_format($data['total_kerugian'], 0, '.', ',') : 0;
         $data['barang_rusak_id'] = isset($data['produk_id']) ? $data['produk_id'] : $data['bahan_baku_id'];
         return $data;
     }
