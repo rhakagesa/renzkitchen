@@ -19,11 +19,6 @@ class PenjualanItem extends Model
         'subtotal',
     ];
 
-    public function penjualan()
-    {
-        return $this->belongsTo(Penjualan::class);
-    }
-
     public function pendapatan()
     {
         return $this->belongsTo(Pendapatan::class);
