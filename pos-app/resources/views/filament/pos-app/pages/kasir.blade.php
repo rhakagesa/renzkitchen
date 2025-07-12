@@ -139,12 +139,12 @@
 
             <x-filament::button
             
-            wire:click="simpanDanCetak"
+            wire:click="simpan"
             color="primary"
             class="w-full mt-4"
             :disabled="collect($cart)->isEmpty() || $this->getTotal() <= 0"
             >
-            Simpan & Cetak
+            Simpan
             </x-filament::button>
         </div>
     </div>
@@ -193,10 +193,8 @@
 
 @script
 <script>
-    document.addEventListener('livewire:load', () => {
-        Livewire.on('printNota', () => {
-            window.print();
-        });
+    $js('printNota', () => {
+        window.print();
     });
 </script>
 @endscript

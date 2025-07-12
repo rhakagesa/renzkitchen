@@ -5,6 +5,8 @@ namespace App\Filament\PosApp\Pages;
 use App\Models\Kategori;
 use App\Models\Pendapatan;
 use App\Models\Produk;
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
 use Illuminate\Database\Eloquent\Collection;
@@ -108,7 +110,7 @@ class Kasir extends Page
         $this->pajak = $pajak;
     }
 
-    public function simpanDanCetak()
+    public function simpan()
     {
         DB::beginTransaction();
 
@@ -120,13 +122,13 @@ class Kasir extends Page
             $grandTotal = $setelahDiskon + $pajakRp;
 
             $pendapatan = Pendapatan::create([
-                'tanggal' => now(),
+                'tanggal' => date('Y-m-d'),
                 'tipe' => 'penjualan',
                 'total' => $subtotal,
                 'diskon' => $this->diskon,
                 'pajak' => $this->pajak,
                 'grand_total' => $grandTotal,
-                'keterangan' => 'Penjualan dari kasir',
+                'keterangan' => 'Penjualan Kasir',
             ]);
 
             $items = [];
@@ -155,8 +157,13 @@ class Kasir extends Page
             $this->diskon = 0;
             $this->pajak = 0;
 
-            $this->dispatch('printNota'); // trigger cetak setelah simpan
+            $this->js('printNota');
 
+            Notification::make()
+            ->title('Transaksi berhasil disimpan')
+            ->success()
+            ->send();
+            $this->mount();
         } catch (\Exception $e) {
             DB::rollBack();
             // Optional: tampilkan error
