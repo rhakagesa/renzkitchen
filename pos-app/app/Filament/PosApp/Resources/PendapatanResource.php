@@ -228,6 +228,11 @@ class PendapatanResource extends Resource
                     ])
                 ], layout: FiltersLayout::AboveContent)
             ->actions([
+                Tables\Actions\Action::make("nota")
+                    ->label('Nota')
+                    ->icon('heroicon-s-printer')
+                    ->hidden(fn ($record) => $record->tipe !== 'penjualan')
+                    ->url(fn ($record) => self::getUrl('cetak-nota', ['record' => $record->id])),
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make()
                     ->hidden(fn ($record) => $record->deleted_at !== null),
@@ -257,6 +262,7 @@ class PendapatanResource extends Resource
             'create' => Pages\CreatePendapatan::route('/create'),
             'view' => Pages\ViewPendapatan::route('/{record}'),
             'edit' => Pages\EditPendapatan::route('/{record}/edit'),
+            'cetak-nota' => Pages\CetakNota::route('/{record}/cetak-nota'),
         ];
     }
 
