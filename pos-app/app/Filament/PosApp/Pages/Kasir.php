@@ -6,15 +6,19 @@ use App\Filament\PosApp\Resources\PendapatanResource;
 use App\Models\Kategori;
 use App\Models\Pendapatan;
 use App\Models\Produk;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Panel;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class Kasir extends Page
 {
+    use HasPageShield;
+
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
     protected static string $view = 'filament.pos-app.pages.kasir';
     protected static ?string $navigationLabel = 'Kasir';

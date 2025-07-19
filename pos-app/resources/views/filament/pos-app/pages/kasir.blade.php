@@ -48,7 +48,11 @@
         {{-- Invoice --}}
         <div class="w-full lg:w-[300px] rounded-xl shadow p-4 min-h-[450px] max-h-[90vh] overflow-y-auto">
             <div class="w-full flex flex-col items-center">
-                <img src="{{ asset('storage/logo-nota.png') }}" alt="Logo" style="width: auto; height: 80px;">
+                <img 
+                    src="{{ asset('storage/logo-nota.png') }}" 
+                    alt="Logo" 
+                    class="block mx-auto mb-1" 
+                    style="height: 80px;">
                 <h3 class="text-md font-semibold">Jln. Tirta Tawar No. 1</h3>
                 <p class="text-sm font-medium">0811 1111 1111</p>
                 <p class="text-xs">{{date('d-m-Y H:i:s')}}</p>
