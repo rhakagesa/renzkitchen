@@ -40,6 +40,9 @@ class MutasiStokResource extends Resource
         return $form
             ->schema([
                 //
+                DatePicker::make('tanggal')
+                    ->label('Tanggal')
+                    ->required(),
                 Repeater::make('bahan_baku')
                     ->label('Bahan Baku')
                     ->schema([

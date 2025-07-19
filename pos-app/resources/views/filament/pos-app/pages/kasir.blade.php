@@ -3,7 +3,7 @@
         {{-- Katalog dan Kategori --}}
         <div class="flex flex-col gap-4 lg:w-3/4 w-full">
             {{-- Sidebar Kategori --}}
-            <div class="w-full bg-white rounded-xl shadow p-4">
+            <div class="w-full rounded-xl shadow p-4">
                 <h3 class="text-lg font-semibold mb-4">Kategori</h3>
                 <div class="flex flex-wrap gap-2">
                     @foreach ($this->kategoris as $kategori)
@@ -19,13 +19,14 @@
             </div>
 
             {{-- Produk --}}
-            <div class="w-full bg-white rounded-xl shadow p-4">
+            <div class="w-full rounded-xl shadow p-4">
                 <h3 class="text-lg font-semibold mb-4">Produk</h3>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                     @foreach ($this->produks as $produk)
                         <button
+                            @disabled($produk->stok <= 0)
                             wire:click="addToCart({{ $produk->id }})"
-                            class="flex flex-col items-center text-center rounded-lg border border-gray-200 p-2 hover:bg-gray-50 transition"
+                            class="flex flex-col items-center text-center rounded-lg border p-2 transition"
                         >
                             <img src="{{ asset('storage/' . $produk->gambar) }}"
                                  alt="{{ $produk->nama }}"
@@ -45,7 +46,7 @@
         </div>
 
         {{-- Invoice --}}
-        <div class="w-full lg:w-[300px] bg-white rounded-xl shadow p-4 min-h-[450px] max-h-[90vh] overflow-y-auto">
+        <div class="w-full lg:w-[300px] rounded-xl shadow p-4 min-h-[450px] max-h-[90vh] overflow-y-auto">
             <div class="w-full flex flex-col items-center">
                 <img src="{{ asset('storage/logo-nota.png') }}" alt="Logo" style="width: auto; height: 80px;">
                 <h3 class="text-md font-semibold">Jln. Tirta Tawar No. 1</h3>
@@ -112,9 +113,10 @@
                 <label class="text-sm font-medium">Diskon (%)</label>
                 <x-filament::input
                     type="number"
-                    wire:model.lazy="diskon"
+                    wire:model.live="diskon"
                     min="0"
                     max="100"
+                    oninput="this.value = this.value > 100 ? 100 : Math.max(0, this.value)"
                     class="w-full text-sm"
                 />
             </div>
@@ -123,13 +125,13 @@
                 <label class="text-sm font-medium">Pajak (%)</label>
                 <x-filament::input
                     type="number"
-                    wire:model.lazy="pajak"
+                    wire:model.live="pajak"
                     min="0"
                     max="100"
+                    oninput="this.value = this.value > 100 ? 100 : Math.max(0, this.value)"
                     class="w-full text-sm"
                 />
             </div>
-            
 
             <hr class="my-3">
             <div class="flex justify-between font-bold text-lg">

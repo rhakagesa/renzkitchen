@@ -2,10 +2,11 @@
 
 namespace App\Filament\PosApp\Pages;
 
+use App\Filament\PosApp\Resources\PendapatanResource;
 use App\Models\Kategori;
 use App\Models\Pendapatan;
 use App\Models\Produk;
-use Filament\Actions\Action;
+use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Filament\Resources\Pages\Concerns\InteractsWithRecord;
@@ -157,11 +158,16 @@ class Kasir extends Page
             $this->diskon = 0;
             $this->pajak = 0;
 
-            $this->js('printNota');
-
             Notification::make()
             ->title('Transaksi berhasil disimpan')
             ->success()
+            ->body('Ingin cetak struk?')
+            ->actions([
+                Action::make('Cetak')
+                    ->icon('heroicon-s-printer')
+                    ->url(PendapatanResource::getUrl('cetak-nota', ['record' => $pendapatan->id])),
+            ])
+            ->seconds(10)
             ->send();
             $this->mount();
         } catch (\Exception $e) {
